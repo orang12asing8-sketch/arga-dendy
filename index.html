@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduKelas10 - Bank Soal & Rangkuman SMA/SMK</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CSS Khusus Efek 3D Flip Card */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0284c7;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans transition-colors duration-300 min-h-screen flex flex-col">
+
+    <!-- NAVIGATION BAR -->
+    <nav class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                
+                <!-- Logo Aplikasi -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('flashcards')">
+                    <div class="bg-gradient-to-tr from-sky-600 to-indigo-600 p-2.5 rounded-xl text-white shadow-lg shadow-sky-500/30">
+                        <i class="fa-solid fa-graduation-cap text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">EduKelas10</span>
+                        <span class="block text-[10px] font-bold tracking-wider uppercase text-sky-600 dark:text-sky-400">Portal SMA/SMK Kelas X</span>
+                    </div>
+                </div>
+
+                <!-- Nav Menu Desktop -->
+                <div class="hidden md:flex space-x-1">
+                    <button onclick="switchTab('flashcards')" id="nav-flashcards" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center space-x-2">
+                        <i class="fa-solid fa-clone"></i>
+                        <span>Flashcard Hafalan</span>
+                    </button>
+                    <button onclick="switchTab('summary')" id="nav-summary" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex items-center space-x-2">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span>Rangkuman Materi</span>
+                    </button>
+                    <button onclick="switchTab('quiz')" id="nav-quiz" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex items-center space-x-2">
+                        <i class="fa-solid fa-vial"></i>
+                        <span>Kuis Interaktif</span>
+                    </button>
+                    <button onclick="switchTab('crud')" id="nav-crud" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex items-center space-x-2">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Kelola Soal & Rangkuman</span>
+                    </button>
+                </div>
+
+                <!-- Dark Mode & Action Button -->
+                <div class="flex items-center space-x-2">
+                    <button id="theme-toggle" onclick="toggleDarkMode()" class="p-2.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Toggle Tema">
+                        <i class="fa-solid fa-moon dark:hidden text-lg"></i>
+                        <i class="fa-solid fa-sun hidden dark:block text-amber-400 text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu Bar -->
+        <div class="md:hidden flex justify-around border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2 px-1 text-xs">
+            <button onclick="switchTab('flashcards')" class="flex flex-col items-center py-1 px-2 text-sky-600">
+                <i class="fa-solid fa-clone text-base mb-1"></i>
+                <span>Kartu</span>
+            </button>
+            <button onclick="switchTab('summary')" class="flex flex-col items-center py-1 px-2 text-slate-500">
+                <i class="fa-solid fa-book-open text-base mb-1"></i>
+                <span>Rangkuman</span>
+            </button>
+            <button onclick="switchTab('quiz')" class="flex flex-col items-center py-1 px-2 text-slate-500">
+                <i class="fa-solid fa-vial text-base mb-1"></i>
+                <span>Kuis</span>
+            </button>
+            <button onclick="switchTab('crud')" class="flex flex-col items-center py-1 px-2 text-slate-500">
+                <i class="fa-solid fa-pen-to-square text-base mb-1"></i>
+                <span>Kelola</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- CONTAINER UTAMA -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- TAB 1: FLASHCARDS INTERAKTIF 3D -->
+        <section id="tab-flashcards" class="tab-content space-y-6">
+            <!-- Header Section -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-sky-600 via-indigo-600 to-blue-700 rounded-2xl p-6 text-white shadow-xl">
+                <div>
+                    <span class="bg-white/20 text-xs px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider">Materi Kelas 10</span>
+                    <h1 class="text-2xl font-bold mt-1">Kartu Hafalan Flashcard 3D</h1>
+                    <p class="text-sky-100 text-sm">Klik kartu untuk membalik (flip) antara Pertanyaan dan Kunci Jawaban.</p>
+                </div>
+                <!-- Filter Mata Pelajaran Kelas 10 -->
+                <div class="flex items-center gap-2">
+                    <select id="filter-category" onchange="renderFlashcards()" class="bg-white/10 text-white backdrop-blur-md border border-white/20 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-white/50">
+                        <option value="All" class="text-slate-800">Semua Mata Pelajaran</option>
+                        <option value="Informatika Kelas 10" class="text-slate-800">Informatika Kelas 10</option>
+                        <option value="Matematika Kelas 10" class="text-slate-800">Matematika Kelas 10</option>
+                        <option value="Bahasa Indonesia Kelas 10" class="text-slate-800">Bahasa Indonesia Kelas 10</option>
+                        <option value="Bahasa Inggris Kelas 10" class="text-slate-800">Bahasa Inggris Kelas 10</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Carousel Flashcard -->
+            <div class="max-w-xl mx-auto my-8">
+                <!-- Counter & Badge -->
+                <div class="flex justify-between items-center mb-3 text-sm text-slate-500 dark:text-slate-400">
+                    <span id="card-counter" class="font-semibold">Kartu 1 dari 1</span>
+                    <span id="card-category-badge" class="bg-sky-100 text-sky-700 dark:bg-sky-900/50 dark:text-sky-300 text-xs px-3 py-1 rounded-full font-bold">Informatika</span>
+                </div>
+
+                <!-- Flip Card Container -->
+                <div class="perspective-1000 w-full h-80 cursor-pointer group" onclick="toggleCardFlip()">
+                    <div id="flashcard-inner" class="relative w-full h-full duration-500 transform-style-3d shadow-xl rounded-2xl">
+                        
+                        <!-- Sisi Depan Kartu (Pertanyaan/Konsep) -->
+                        <div class="absolute w-full h-full backface-hidden bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-6 flex flex-col justify-between items-center text-center shadow-sm">
+                            <div class="w-full flex justify-between items-center text-xs text-slate-400">
+                                <span class="font-bold text-sky-600 dark:text-sky-400"><i class="fa-solid fa-circle-question mr-1"></i> Pertanyaan / Konsep</span>
+                                <span class="italic">Klik untuk lihat jawaban</span>
+                            </div>
+                            <div class="my-auto px-4">
+                                <p id="card-front-text" class="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-100 leading-relaxed">Loading Soal...</p>
+                            </div>
+                            <div class="text-xs text-slate-400 flex items-center gap-1">
+                                <i class="fa-solid fa-rotate"></i> Klik untuk membalik kartu
+                            </div>
+                        </div>
+
+                        <!-- Sisi Belakang Kartu (Jawaban/Penjelasan) -->
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-gradient-to-br from-slate-900 via-sky-950 to-indigo-950 text-white rounded-2xl p-6 flex flex-col justify-between items-center text-center border-2 border-sky-500 shadow-sm">
+                            <div class="w-full flex justify-between items-center text-xs text-sky-300">
+                                <span class="font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Kunci Jawaban & Penjelasan</span>
+                                <span class="italic">Sisi Belakang</span>
+                            </div>
+                            <div class="my-auto px-4">
+                                <p id="card-back-text" class="text-lg md:text-xl font-semibold text-emerald-400 leading-relaxed mb-2">Loading Jawaban...</p>
+                            </div>
+                            <div class="text-xs text-sky-300 flex items-center gap-1">
+                                <i class="fa-solid fa-brain"></i> Pahami konsepnya!
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Navigasi Tombol Flashcard -->
+                <div class="flex justify-between items-center mt-6">
+                    <button onclick="prevCard()" class="px-5 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium transition-all shadow-sm flex items-center gap-2">
+                        <i class="fa-solid fa-chevron-left"></i> Sebelumnya
+                    </button>
+                    <button onclick="shuffleCards()" class="p-3 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 rounded-xl text-slate-700 dark:text-slate-200 transition-all shadow-sm" title="Acak Kartu">
+                        <i class="fa-solid fa-shuffle"></i>
+                    </button>
+                    <button onclick="nextCard()" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-xl transition-all shadow-md flex items-center gap-2">
+                        Berikutnya <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: RANGKUMAN MATERI & CATATAN PINTAR -->
+        <section id="tab-summary" class="tab-content hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div>
+                    <h2 class="text-xl font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-sky-600"></i>
+                        <span>Rangkuman Materi Kelas 10 (SMA/SMK)</span>
+                    </h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Pelajari poin-poin penting materi pelajaran atau tambahkan rangkuman catatanmu sendiri.</p>
+                </div>
+                
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="copySummaryToClipboard()" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-copy"></i>
+                        <span>Salin Rangkuman</span>
+                    </button>
+                    <button onclick="downloadSummaryTxt()" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold rounded-xl transition-all shadow-md flex items-center gap-1.5">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Unduh TXT</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Selector Filter Rangkuman -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2" id="summary-subject-tabs">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Tampilan Rangkuman Content -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Main Summary View -->
+                <div class="lg:col-span-2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-3">
+                        <h3 id="summary-title" class="text-lg font-bold text-sky-700 dark:text-sky-400">Loading Judul...</h3>
+                        <span id="summary-badge" class="text-xs bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 font-bold px-2.5 py-1 rounded-full">Kelas 10</span>
+                    </div>
+                    
+                    <div id="summary-content-body" class="prose dark:prose-invert text-sm leading-relaxed text-slate-700 dark:text-slate-300 whitespace-pre-line space-y-3">
+                        <!-- Content Injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Side Box: Tambah Catatan Rangkuman Baru -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm h-fit space-y-4">
+                    <h3 class="font-bold text-base flex items-center gap-2 text-slate-800 dark:text-slate-100">
+                        <i class="fa-solid fa-plus-circle text-sky-600"></i>
+                        <span>Tambah Rangkuman Baru</span>
+                    </h3>
+                    
+                    <form id="form-add-summary" onsubmit="handleAddSummary(event)" class="space-y-3 text-xs">
+                        <div>
+                            <label class="block font-semibold uppercase text-slate-500 mb-1">Mata Pelajaran</label>
+                            <input type="text" id="summary-input-subject" required placeholder="misal: Informatika Kelas 10" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold uppercase text-slate-500 mb-1">Judul Bab / Topik</label>
+                            <input type="text" id="summary-input-title" required placeholder="misal: Bab 3 - Algoritma Pemrograman" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold uppercase text-slate-500 mb-1">Isi Rangkuman Materi</label>
+                            <textarea id="summary-input-content" required rows="6" placeholder="Tulis poin-poin rangkuman penting di sini..." class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-xl text-sm transition-all shadow-md">
+                            Simpan Rangkuman
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: KUIS SINGKAT INTERAKTIF -->
+        <section id="tab-quiz" class="tab-content hidden space-y-6">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-6 max-w-3xl mx-auto">
+                
+                <!-- Screen Kuis Aktif -->
+                <div id="quiz-container">
+                    <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-slate-700">
+                        <div>
+                            <span class="text-xs font-bold text-sky-600 dark:text-sky-400 uppercase tracking-wider">Kuis Latihan Ujian Kelas 10</span>
+                            <h2 class="text-xl font-bold">Uji Pemahaman Materi</h2>
+                        </div>
+                        <div class="text-right">
+                            <span id="quiz-progress" class="text-sm font-bold text-slate-500">Soal 1/5</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full mb-6 overflow-hidden">
+                        <div id="quiz-progress-bar" class="bg-sky-600 h-full w-0 transition-all duration-300"></div>
+                    </div>
+
+                    <!-- Pertanyaan Kuis -->
+                    <div class="mb-6">
+                        <h3 id="quiz-question" class="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-4">
+                            Pertanyaan Kuis...
+                        </h3>
+
+                        <!-- Pilihan Ganda -->
+                        <div id="quiz-options" class="space-y-3">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Box Feedback Jawaban -->
+                    <div id="quiz-feedback" class="hidden p-4 rounded-xl text-sm font-medium mb-4"></div>
+
+                    <!-- Tombol Lanjut -->
+                    <div class="flex justify-end">
+                        <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-xl transition-all shadow-md">
+                            Soal Lanjutan <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Screen Hasil Skor Kuis -->
+                <div id="quiz-result" class="hidden text-center py-8">
+                    <div class="w-20 h-20 bg-sky-100 dark:bg-sky-900/50 text-sky-600 dark:text-sky-400 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2">Kuis Selesai!</h2>
+                    <p class="text-slate-500 dark:text-slate-400 mb-6 text-sm">Berikut adalah hasil evaluasi latihan soal Kelas 10 kamu:</p>
+                    
+                    <div class="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6 max-w-sm mx-auto mb-6 border border-slate-200 dark:border-slate-800">
+                        <div class="text-5xl font-extrabold text-sky-600 dark:text-sky-400 mb-1" id="quiz-score-num">0%</div>
+                        <p id="quiz-score-text" class="text-sm font-medium text-slate-600 dark:text-slate-300">Skor Kamu: 0 dari 0</p>
+                    </div>
+
+                    <button onclick="restartQuiz()" class="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 mx-auto">
+                        <i class="fa-solid fa-rotate-right"></i> Ulangi Kuis
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TAB 4: KELOLA SOAL & RANGKUMAN (CRUD PERMANEN) -->
+        <section id="tab-crud" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Form Input/Edit Kartu Soal -->
+                <div class="lg:col-span-1 bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 h-fit">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-square-plus text-sky-600"></i>
+                        <span id="crud-form-title">Tambah Kartu Soal Baru</span>
+                    </h2>
+
+                    <form id="form-card" onsubmit="handleSaveCard(event)" class="space-y-4">
+                        <input type="hidden" id="edit-card-id" value="">
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Mata Pelajaran (Kelas 10)</label>
+                            <input type="text" id="input-category" required placeholder="misal: Informatika Kelas 10" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Pertanyaan (Sisi Depan Kartu)</label>
+                            <textarea id="input-question" required rows="2" placeholder="Tuliskan pertanyaan..." class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Kunci / Jawaban (Sisi Belakang)</label>
+                            <input type="text" id="input-answer" required placeholder="Jawaban singkat/penjelasan" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        </div>
+
+                        <!-- Opsi Pilihan Ganda -->
+                        <div class="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-700">
+                            <label class="block text-xs font-semibold uppercase text-slate-500">Pilihan Ganda untuk Kuis</label>
+                            <input type="text" id="opt-a" required placeholder="Opsi A" class="w-full px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-xs">
+                            <input type="text" id="opt-b" required placeholder="Opsi B" class="w-full px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-xs">
+                            <input type="text" id="opt-c" required placeholder="Opsi C" class="w-full px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-xs">
+                            <input type="text" id="opt-d" required placeholder="Opsi D" class="w-full px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-xs">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Jawaban Benar Kuis</label>
+                            <select id="input-correct" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm">
+                                <option value="0">Opsi A</option>
+                                <option value="1">Opsi B</option>
+                                <option value="2">Opsi C</option>
+                                <option value="3">Opsi D</option>
+                            </select>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button type="submit" class="flex-grow py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-xl text-sm transition-all shadow-md">
+                                Simpan Kartu
+                            </button>
+                            <button type="button" onclick="cancelEditCard()" id="btn-cancel-edit" class="hidden px-4 py-2.5 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium rounded-xl">
+                                Batal
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tabel Manajemen Data Soal & Rangkuman -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Data Soal Table -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-base font-bold flex items-center gap-2">
+                                <i class="fa-solid fa-database text-sky-600"></i>
+                                <span>Daftar Bank Soal</span>
+                            </h2>
+                            <button onclick="resetToDefaultData()" class="text-xs text-rose-500 hover:underline">
+                                Reset Ke Data Bawaan
+                            </button>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-100 dark:bg-slate-900 text-slate-500 text-xs uppercase font-semibold">
+                                    <tr>
+                                        <th class="p-3">Mapel</th>
+                                        <th class="p-3">Pertanyaan</th>
+                                        <th class="p-3">Jawaban</th>
+                                        <th class="p-3 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="crud-table-body" class="divide-y divide-slate-200 dark:divide-slate-700">
+                                    <!-- Injected by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Data Rangkuman Table -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700">
+                        <h2 class="text-base font-bold flex items-center gap-2 mb-4">
+                            <i class="fa-solid fa-list-check text-indigo-600"></i>
+                            <span>Daftar Rangkuman Tersimpan</span>
+                        </h2>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-100 dark:bg-slate-900 text-slate-500 text-xs uppercase font-semibold">
+                                    <tr>
+                                        <th class="p-3">Mapel</th>
+                                        <th class="p-3">Judul Bab</th>
+                                        <th class="p-3 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="crud-summary-body" class="divide-y divide-slate-200 dark:divide-slate-700">
+                                    <!-- Injected by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>© 2026 EduKelas10 - Media Pembelajaran Digital & Bank Soal Kelas X SMA/SMK Kurikulum Merdeka.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* ==========================================================================
+           1. DATA INITIALIZATION (PRE-LOADED MATERI KELAS 10 SMA/SMK)
+           ========================================================================== */
+        
+        // Data Default Flashcards & Kuis Kelas 10
+        const defaultFlashcards = [
+            {
+                id: 101,
+                category: "Informatika Kelas 10",
+                question: "Apa fungsi utama dari Berpikir Komputasional (Computational Thinking)?",
+                answer: "Memecahkan masalah kompleks secara efisien dengan prinsip dekomposisi, pengenalan pola, abstraksi, dan algoritma.",
+                options: [
+                    "Memecahkan masalah kompleks secara sistematis",
+                    "Memperbaiki hardware komputer yang rusak",
+                    "Membuat desain grafis otomatis",
+                    "Menulis program tanpa kesalahan syntax"
+                ],
+                correctAnswerIndex: 0
+            },
+            {
+                id: 102,
+                category: "Informatika Kelas 10",
+                question: "Sebutkan 4 pilar utama dalam Berpikir Komputasional!",
+                answer: "1. Dekomposisi, 2. Pengenalan Pola (Pattern Recognition), 3. Abstraksi, 4. Algoritma.",
+                options: [
+                    "Input, Process, Output, Storage",
+                    "Dekomposisi, Pengenalan Pola, Abstraksi, Algoritma",
+                    "Software, Hardware, Brainware, Network",
+                    "Searching, Sorting, Stacking, Queuing"
+                ],
+                correctAnswerIndex: 1
+            },
+            {
+                id: 103,
+                category: "Matematika Kelas 10",
+                question: "Berapakah nilai dari 2^5 (2 pangkat 5)?",
+                answer: "32",
+                options: ["10", "16", "32", "64"],
+                correctAnswerIndex: 2
+            },
+            {
+                id: 104,
+                category: "Bahasa Indonesia Kelas 10",
+                question: "Apa tujuan utama dari Teks Laporan Hasil Observasi (LHO)?",
+                answer: "Menyajikan informasi faktual berdasarkan hasil pengamatan secara sistematis dan obyektif.",
+                options: [
+                    "Mempengaruhi pembaca agar setuju pendapat penulis",
+                    "Menyajikan fakta hasil pengamatan secara sistematis",
+                    "Menceritakan kisah rekaan dongeng",
+                    "Menjelaskan langkah-langkah membuat sesuatu"
+                ],
+                correctAnswerIndex: 1
+            },
+            {
+                id: 105,
+                category: "Bahasa Inggris Kelas 10",
+                question: "Which tense is used to describe past completed actions in a Descriptive or Recount text?",
+                answer: "Simple Past Tense (Subject + Verb 2)",
+                options: ["Simple Present Tense", "Simple Past Tense", "Present Continuous Tense", "Future Tense"],
+                correctAnswerIndex: 1
+            }
+        ];
+
+        // Data Default Rangkuman Materi Kelas 10
+        const defaultSummaries = [
+            {
+                id: 201,
+                subject: "Informatika Kelas 10",
+                title: "Bab 1: Berpikir Komputasional & Algoritma",
+                content: `• Berpikir Komputasional adalah landasan dalam memecahkan masalah.
+• 4 Pilar utama:
+  1. Dekomposisi: Memecah masalah besar menjadi bagian-bagian kecil.
+  2. Pengenalan Pola: Mencari kesamaan/pola dari masalah yang pernah diselesaikan.
+  3. Abstraksi: Fokus pada informasi penting dan mengabaikan detail irrelevant.
+  4. Algoritma: Menyusun langkah-langkah penyelesaian secara logis & berurutan.
+• Struktur Data Dasar:
+  - Stack (Tumpukan): LIFO (Last In First Out).
+  - Queue (Antrean): FIFO (First In First Out).`
+            },
+            {
+                id: 202,
+                subject: "Matematika Kelas 10",
+                title: "Bab 1: Eksponen & Logaritma",
+                content: `• Sifat-Sifat Eksponen (Pangkatan):
+  1. a^m * a^n = a^(m+n)
+  2. a^m / a^n = a^(m-n)
+  3. (a^m)^n = a^(m*n)
+  4. a^0 = 1 (untuk a ≠ 0)
+• Definis Logaritma:
+  g^log(x) = y  =>  g^y = x
+• Contoh Aplikasi: Perhitungan pertumbuhan bakteri & skala Richter gempa.`
+            },
+            {
+                id: 203,
+                subject: "Bahasa Indonesia Kelas 10",
+                title: "Bab 1: Teks Laporan Hasil Observasi (LHO)",
+                content: `• Ciri-Ciri Teks LHO:
+  - Bersifat objektif, faktual, dan tidak memihak.
+  - Ditulis berdasarkan pengamatan langsung.
+• Struktur Teks LHO:
+  1. Pernyataan Umum / Klasifikasi: Memuat definisi umum subjek.
+  2. Deskripsi Bagian: Menjelaskan rincian objek yang diamati.
+  3. Deskripsi Manfaat / Kesimpulan: Menjelaskan kegunaan objek dalam kehidupan.`
+            }
+        ];
+
+        // State Aplikasi Global
+        let flashcards = [];
+        let summaries = [];
+        let currentCardIndex = 0;
+        let filteredCards = [];
+        let activeSummaryId = null;
+        let quizCurrentIndex = 0;
+        let quizScore = 0;
+
+        /* ==========================================================================
+           2. INITIALIZATION ON LOAD
+           ========================================================================== */
+        window.onload = function() {
+            // Load Cards dari LocalStorage
+            const savedCards = localStorage.getItem('edukelas10_cards');
+            if (savedCards) {
+                flashcards = JSON.parse(savedCards);
+            } else {
+                flashcards = [...defaultFlashcards];
+                saveCardsToStorage();
+            }
+
+            // Load Summaries dari LocalStorage
+            const savedSummaries = localStorage.getItem('edukelas10_summaries');
+            if (savedSummaries) {
+                summaries = JSON.parse(savedSummaries);
+            } else {
+                summaries = [...defaultSummaries];
+                saveSummariesToStorage();
+            }
+
+            // Initial Render Component
+            renderFlashcards();
+            renderSummariesTab();
+            renderCRUDTable();
+            renderCRUDSummaryTable();
+            initQuiz();
+        };
+
+        function saveCardsToStorage() {
+            localStorage.setItem('edukelas10_cards', JSON.stringify(flashcards));
+        }
+
+        function saveSummariesToStorage() {
+            localStorage.setItem('edukelas10_summaries', JSON.stringify(summaries));
+        }
+
+        /* ==========================================================================
+           3. SWITCH TAB NAVIGASI
+           ========================================================================== */
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-sky-50', 'dark:bg-sky-950/40', 'text-sky-600', 'font-bold');
+            });
+            const activeNav = document.getElementById(`nav-${tabName}`);
+            if(activeNav) {
+                activeNav.classList.add('bg-sky-50', 'dark:bg-sky-950/40', 'text-sky-600', 'font-bold');
+            }
+
+            if(tabName === 'quiz') {
+                initQuiz();
+            }
+        }
+
+        /* ==========================================================================
+           4. FLASHCARDS LOGIC (3D FLIP & NAVIGASI)
+           ========================================================================== */
+        function renderFlashcards() {
+            const selectedCategory = document.getElementById('filter-category').value;
+            
+            if (selectedCategory === 'All') {
+                filteredCards = [...flashcards];
+            } else {
+                filteredCards = flashcards.filter(c => c.category === selectedCategory);
+            }
+
+            if (currentCardIndex >= filteredCards.length) {
+                currentCardIndex = 0;
+            }
+
+            const cardFront = document.getElementById('card-front-text');
+            const cardBack = document.getElementById('card-back-text');
+            const cardBadge = document.getElementById('card-category-badge');
+            const cardCounter = document.getElementById('card-counter');
+
+            if (filteredCards.length === 0) {
+                cardFront.innerText = "Belum ada soal untuk mata pelajaran ini.";
+                cardBack.innerText = "Tambahkan soal baru melalui menu Kelola Soal.";
+                cardBadge.innerText = "Kosong";
+                cardCounter.innerText = "0 dari 0";
+                return;
+            }
+
+            resetCardFlip();
+
+            const card = filteredCards[currentCardIndex];
+            cardFront.innerText = card.question;
+            cardBack.innerText = card.answer;
+            cardBadge.innerText = card.category;
+            cardCounter.innerText = `Kartu ${currentCardIndex + 1} dari ${filteredCards.length}`;
+        }
+
+        function toggleCardFlip() {
+            document.getElementById('flashcard-inner').classList.toggle('rotate-y-180');
+        }
+
+        function resetCardFlip() {
+            document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+        }
+
+        function nextCard() {
+            if (filteredCards.length === 0) return;
+            currentCardIndex = (currentCardIndex + 1) % filteredCards.length;
+            renderFlashcards();
+        }
+
+        function prevCard() {
+            if (filteredCards.length === 0) return;
+            currentCardIndex = (currentCardIndex - 1 + filteredCards.length) % filteredCards.length;
+            renderFlashcards();
+        }
+
+        function shuffleCards() {
+            filteredCards.sort(() => Math.random() - 0.5);
+            currentCardIndex = 0;
+            renderFlashcards();
+        }
+
+        /* ==========================================================================
+           5. RANGKUMAN MATERI & CATATAN PINTAR
+           ========================================================================== */
+        function renderSummariesTab() {
+            const tabsContainer = document.getElementById('summary-subject-tabs');
+            tabsContainer.innerHTML = '';
+
+            if (summaries.length === 0) {
+                document.getElementById('summary-title').innerText = "Belum Ada Rangkuman";
+                document.getElementById('summary-content-body').innerText = "Silakan tambah rangkuman baru di form sebelah kanan.";
+                return;
+            }
+
+            if (!activeSummaryId || !summaries.find(s => s.id === activeSummaryId)) {
+                activeSummaryId = summaries[0].id;
+            }
+
+            summaries.forEach(sum => {
+                const btn = document.createElement('button');
+                const isActive = sum.id === activeSummaryId;
+                btn.className = `px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                    isActive 
+                    ? 'bg-sky-600 text-white shadow-md' 
+                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100'
+                }`;
+                btn.innerText = `${sum.subject}: ${sum.title}`;
+                btn.onclick = () => {
+                    activeSummaryId = sum.id;
+                    renderSummariesTab();
+                };
+                tabsContainer.appendChild(btn);
+            });
+
+            // Display Active Summary Content
+            const activeSummary = summaries.find(s => s.id === activeSummaryId);
+            if (activeSummary) {
+                document.getElementById('summary-title').innerText = activeSummary.title;
+                document.getElementById('summary-badge').innerText = activeSummary.subject;
+                document.getElementById('summary-content-body').innerText = activeSummary.content;
+            }
+        }
+
+        function handleAddSummary(e) {
+            e.preventDefault();
+            const subject = document.getElementById('summary-input-subject').value.trim();
+            const title = document.getElementById('summary-input-title').value.trim();
+            const content = document.getElementById('summary-input-content').value.trim();
+
+            const newSummary = {
+                id: Date.now(),
+                subject,
+                title,
+                content
+            };
+
+            summaries.push(newSummary);
+            saveSummariesToStorage();
+            activeSummaryId = newSummary.id;
+
+            document.getElementById('form-add-summary').reset();
+            renderSummariesTab();
+            renderCRUDSummaryTable();
+            alert('Rangkuman materi berhasil ditambahkan!');
+        }
+
+        function copySummaryToClipboard() {
+            const activeSummary = summaries.find(s => s.id === activeSummaryId);
+            if (!activeSummary) return;
+
+            const textToCopy = `=== ${activeSummary.subject} - ${activeSummary.title} ===\n\n${activeSummary.content}`;
+            
+            // Menggunakan document.execCommand('copy') untuk mendukung batasan iFrame browser
+            const dummyTextArea = document.createElement('textarea');
+            dummyTextArea.value = textToCopy;
+            document.body.appendChild(dummyTextArea);
+            dummyTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummyTextArea);
+
+            alert('Rangkuman berhasil disalin ke Clipboard!');
+        }
+
+        function downloadSummaryTxt() {
+            const activeSummary = summaries.find(s => s.id === activeSummaryId);
+            if (!activeSummary) return;
+
+            const text = `=== RANGKUMAN KELAS 10: ${activeSummary.subject} ===\nJudul: ${activeSummary.title}\n\n${activeSummary.content}`;
+            const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `Rangkuman_${activeSummary.subject.replace(/\s+/g, '_')}.txt`;
+            link.click();
+        }
+
+        /* ==========================================================================
+           6. KUIS SINGKAT INTERAKTIF
+           ========================================================================== */
+        function initQuiz() {
+            quizCurrentIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            if (flashcards.length === 0) {
+                document.getElementById('quiz-question').innerText = "Belum ada soal kuis. Silakan tambahkan soal terlebih dahulu.";
+                document.getElementById('quiz-options').innerHTML = "";
+                return;
+            }
+
+            const card = flashcards[quizCurrentIndex];
+            document.getElementById('quiz-progress').innerText = `Soal ${quizCurrentIndex + 1}/${flashcards.length}`;
+            
+            const progressPercent = ((quizCurrentIndex + 1) / flashcards.length) * 100;
+            document.getElementById('quiz-progress-bar').style.width = `${progressPercent}%`;
+
+            document.getElementById('quiz-question').innerText = `${quizCurrentIndex + 1}. [${card.category}] ${card.question}`;
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            card.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 hover:bg-sky-50 dark:hover:bg-slate-700 transition-all text-sm font-medium flex items-center justify-between";
+                btn.innerHTML = `<span><strong class="mr-2">${String.fromCharCode(65 + idx)}.</strong> ${opt}</span>`;
+                btn.onclick = () => checkQuizAnswer(idx, card.correctAnswerIndex, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(selectedIndex, correctIndex, selectedBtn) {
+            const optionsBtns = document.getElementById('quiz-options').children;
+            
+            for (let btn of optionsBtns) {
+                btn.disabled = true;
+                btn.classList.add('cursor-not-allowed');
+            }
+
+            const feedbackBox = document.getElementById('quiz-feedback');
+            feedbackBox.classList.remove('hidden');
+
+            if (selectedIndex === correctIndex) {
+                quizScore++;
+                selectedBtn.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-800', 'dark:bg-emerald-950/60', 'dark:text-emerald-200');
+                feedbackBox.className = "p-4 rounded-xl text-sm font-medium mb-4 bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-300";
+                feedbackBox.innerHTML = "<i class='fa-solid fa-circle-check mr-1'></i> <strong>Jawaban Tepat!</strong> Kerja bagus!";
+            } else {
+                selectedBtn.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-800', 'dark:bg-rose-950/60', 'dark:text-rose-200');
+                optionsBtns[correctIndex].classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-800', 'dark:bg-emerald-950/60', 'dark:text-emerald-200');
+                
+                feedbackBox.className = "p-4 rounded-xl text-sm font-medium mb-4 bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 border border-rose-300";
+                feedbackBox.innerHTML = `<i class='fa-solid fa-circle-xmark mr-1'></i> <strong>Jawaban Kurang Tepat.</strong> Kunci jawaban benar adalah Opsi ${String.fromCharCode(65 + correctIndex)}.`;
+            }
+
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            quizCurrentIndex++;
+            if (quizCurrentIndex < flashcards.length) {
+                renderQuizQuestion();
+            } else {
+                showQuizResult();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+
+            const scorePercent = Math.round((quizScore / flashcards.length) * 100);
+            document.getElementById('quiz-score-num').innerText = `${scorePercent}%`;
+            document.getElementById('quiz-score-text').innerText = `Kamu menjawab ${quizScore} benar dari ${flashcards.length} pertanyaan.`;
+        }
+
+        function restartQuiz() {
+            initQuiz();
+        }
+
+        /* ==========================================================================
+           7. OPERASI CRUD SOAL & RANGKUMAN
+           ========================================================================== */
+        function handleSaveCard(e) {
+            e.preventDefault();
+
+            const editId = document.getElementById('edit-card-id').value;
+            const category = document.getElementById('input-category').value.trim();
+            const question = document.getElementById('input-question').value.trim();
+            const answer = document.getElementById('input-answer').value.trim();
+            const options = [
+                document.getElementById('opt-a').value.trim(),
+                document.getElementById('opt-b').value.trim(),
+                document.getElementById('opt-c').value.trim(),
+                document.getElementById('opt-d').value.trim()
+            ];
+            const correctAnswerIndex = parseInt(document.getElementById('input-correct').value);
+
+            if (editId) {
+                // UPDATE existing card
+                const index = flashcards.findIndex(c => c.id == editId);
+                if (index !== -1) {
+                    flashcards[index] = { id: Number(editId), category, question, answer, options, correctAnswerIndex };
+                }
+            } else {
+                // CREATE new card
+                const newCard = { id: Date.now(), category, question, answer, options, correctAnswerIndex };
+                flashcards.push(newCard);
+            }
+
+            saveCardsToStorage();
+            cancelEditCard();
+            renderFlashcards();
+            renderCRUDTable();
+
+            alert('Data kartu soal berhasil disimpan!');
+        }
+
+        function editCard(id) {
+            const card = flashcards.find(c => c.id === id);
+            if (!card) return;
+
+            document.getElementById('edit-card-id').value = card.id;
+            document.getElementById('input-category').value = card.category;
+            document.getElementById('input-question').value = card.question;
+            document.getElementById('input-answer').value = card.answer;
+            document.getElementById('opt-a').value = card.options[0] || '';
+            document.getElementById('opt-b').value = card.options[1] || '';
+            document.getElementById('opt-c').value = card.options[2] || '';
+            document.getElementById('opt-d').value = card.options[3] || '';
+            document.getElementById('input-correct').value = card.correctAnswerIndex;
+
+            document.getElementById('crud-form-title').innerText = "Edit Kartu Soal";
+            document.getElementById('btn-cancel-edit').classList.remove('hidden');
+        }
+
+        function cancelEditCard() {
+            document.getElementById('edit-card-id').value = '';
+            document.getElementById('form-card').reset();
+            document.getElementById('crud-form-title').innerText = "Tambah Kartu Soal Baru";
+            document.getElementById('btn-cancel-edit').classList.add('hidden');
+        }
+
+        function deleteCard(id) {
+            if (confirm('Apakah kamu yakin ingin menghapus kartu soal ini?')) {
+                flashcards = flashcards.filter(c => c.id !== id);
+                saveCardsToStorage();
+                renderFlashcards();
+                renderCRUDTable();
+            }
+        }
+
+        function deleteSummary(id) {
+            if (confirm('Hapus rangkuman ini?')) {
+                summaries = summaries.filter(s => s.id !== id);
+                saveSummariesToStorage();
+                renderSummariesTab();
+                renderCRUDSummaryTable();
+            }
+        }
+
+        function renderCRUDTable() {
+            const tbody = document.getElementById('crud-table-body');
+            tbody.innerHTML = '';
+
+            if (flashcards.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">Belum ada data tersimpan.</td></tr>`;
+                return;
+            }
+
+            flashcards.forEach((card) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-3"><span class="bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-300 text-xs px-2 py-0.5 rounded font-semibold">${card.category}</span></td>
+                    <td class="p-3 font-medium text-slate-800 dark:text-slate-200">${card.question}</td>
+                    <td class="p-3 text-slate-600 dark:text-slate-400">${card.answer}</td>
+                    <td class="p-3 text-center flex justify-center gap-1">
+                        <button onclick="editCard(${card.id})" class="p-1.5 text-sky-600 hover:bg-sky-50 dark:hover:bg-sky-950 rounded-lg transition-all" title="Edit Soal">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button onclick="deleteCard(${card.id})" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950 rounded-lg transition-all" title="Hapus Soal">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderCRUDSummaryTable() {
+            const tbody = document.getElementById('crud-summary-body');
+            tbody.innerHTML = '';
+
+            if (summaries.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-400">Belum ada rangkuman tersimpan.</td></tr>`;
+                return;
+            }
+
+            summaries.forEach((sum) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-3"><span class="bg-indigo-100 dark:bg-indigo-950 text-indigo-800 dark:text-indigo-300 text-xs px-2 py-0.5 rounded font-semibold">${sum.subject}</span></td>
+                    <td class="p-3 font-medium text-slate-800 dark:text-slate-200">${sum.title}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="deleteSummary(${sum.id})" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950 rounded-lg transition-all" title="Hapus Rangkuman">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function resetToDefaultData() {
+            if (confirm('Kembalikan semua data ke materi default Kelas 10? Data buatanmu akan terhapus.')) {
+                flashcards = [...defaultFlashcards];
+                summaries = [...defaultSummaries];
+                saveCardsToStorage();
+             
+        }
+
+        /* ==========================================================================
+           8. TOGGLE DARK MODE
+           ========================================================================== */
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+    </script>
+</body>
+</html   saveSummariesToStorage();
+                renderFlashcards();
+                renderSummariesTab();
+                renderCRUDTable();
+                renderCRUDSummaryTable();
+            }>
